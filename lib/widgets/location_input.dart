@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:great_places_app/helpers/location_helper.dart';
+import 'package:great_places_app/screens/map_screen.dart';
 import 'package:location/location.dart';
-
-import '../helpers/location_helper.dart';
-import '../screens/map_screen.dart';
 
 class LocationInput extends StatefulWidget {
   final Function onSelectLocation;
 
-  const LocationInput({required this.onSelectLocation, Key? key}) : super(key: key);
+  const LocationInput({required this.onSelectLocation, Key? key})
+      : super(key: key);
 
   @override
-  _LocationInputState createState() => _LocationInputState();
+  State<LocationInput> createState() => _LocationInputState();
 }
 
 class _LocationInputState extends State<LocationInput> {
-  String _previewImageUrl;
+  String? _previewImageUrl;
 
   void _showPreview(double lat, double lng) {
     final staticMapImageUrl = LocationHelper.generateLocationPreviewImage(
@@ -30,31 +30,39 @@ class _LocationInputState extends State<LocationInput> {
   Future<void> _getCurrentUserLocation() async {
     try {
       final locData = await Location().getLocation();
-      _showPreview(locData.latitude, locData.longitude);
-      widget.onSelectPlace(locData.latitude, locData.longitude);
+      _displayLocation(locData.longitude!, locData.longitude!);
     } catch (error) {
       return;
     }
   }
 
   Future<void> _selectOnMap() async {
-    final selectedLocation = await Navigator.of(context).push<LatLng>(
-      MaterialPageRoute(
-        fullscreenDialog: true,
-        builder: (ctx) => MapScreen(
-              isSelecting: true,
-            ),
-      ),
-    );
+    final selectedLocation = await _fetchLocationFromMap();
     if (selectedLocation == null) {
       return;
     }
-    _showPreview(selectedLocation.latitude, selectedLocation.longitude);
-    widget.onSelectPlace(selectedLocation.latitude, selectedLocation.longitude);
+    _displayLocation(selectedLocation.latitude, selectedLocation.longitude);
+  }
+
+  void _displayLocation(double lat, double lng) {
+    _showPreview(lat, lng);
+    widget.onSelectLocation(lat, lng);
+  }
+
+  Future<LatLng?> _fetchLocationFromMap() {
+    return Navigator.of(context).push<LatLng>(
+      MaterialPageRoute(
+        fullscreenDialog: true,
+        builder: (ctx) => const MapScreen(
+          isSelecting: true,
+        ),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Column(
       children: <Widget>[
         Container(
@@ -65,12 +73,12 @@ class _LocationInputState extends State<LocationInput> {
             border: Border.all(width: 1, color: Colors.grey),
           ),
           child: _previewImageUrl == null
-              ? Text(
+              ? const Text(
                   'No Location Chosen',
                   textAlign: TextAlign.center,
                 )
               : Image.network(
-                  _previewImageUrl,
+                  _previewImageUrl!,
                   fit: BoxFit.cover,
                   width: double.infinity,
                 ),
@@ -78,20 +86,22 @@ class _LocationInputState extends State<LocationInput> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            FlatButton.icon(
-              icon: Icon(
+            TextButton.icon(
+              icon: const Icon(
                 Icons.location_on,
               ),
-              label: Text('Current Location'),
-              textColor: Theme.of(context).primaryColor,
+              label: const Text('Current Location'),
+              style: TextButton.styleFrom(
+                  foregroundColor: theme.colorScheme.primary),
               onPressed: _getCurrentUserLocation,
             ),
-            FlatButton.icon(
-              icon: Icon(
+            TextButton.icon(
+              icon: const Icon(
                 Icons.map,
               ),
-              label: Text('Select on Map'),
-              textColor: Theme.of(context).primaryColor,
+              label: const Text('Select on Map'),
+              style: TextButton.styleFrom(
+                  foregroundColor: theme.colorScheme.primary),
               onPressed: _selectOnMap,
             ),
           ],

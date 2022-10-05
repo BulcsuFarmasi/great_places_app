@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:great_places_app/providers/places.dart';
+import 'package:great_places_app/screens/map_screen.dart';
 import 'package:provider/provider.dart';
-
-import '../providers/places.dart';
-import './map_screen.dart';
 
 class PlaceDetailScreen extends StatelessWidget {
   static const routeName = '/place-details';
@@ -18,7 +17,7 @@ class PlaceDetailScreen extends StatelessWidget {
       ),
       body: Column(
         children: [
-          Container(
+          SizedBox(
             height: 250,
             width: double.infinity,
             child: Image.file(

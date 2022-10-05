@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import './secret.dart';
+import 'package:great_places_app/helpers/secret.dart';
 
 class LocationHelper {
   static String generateLocationPreviewImage({double latitude = 0.0, double longitude = 0.0}) {
