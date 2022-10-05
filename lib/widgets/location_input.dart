@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
@@ -63,6 +65,7 @@ class _LocationInputState extends State<LocationInput> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Column(
       children: <Widget>[
         Container(
@@ -92,7 +95,7 @@ class _LocationInputState extends State<LocationInput> {
               ),
               label: const Text('Current Location'),
               style: TextButton.styleFrom(
-                  foregroundColor: Theme.of(context).colorScheme.primary),
+                  foregroundColor: theme.colorScheme.primary),
               onPressed: _getCurrentUserLocation,
             ),
             TextButton.icon(
@@ -101,7 +104,7 @@ class _LocationInputState extends State<LocationInput> {
               ),
               label: const Text('Select on Map'),
               style: TextButton.styleFrom(
-                  foregroundColor: Theme.of(context).colorScheme.primary),
+                  foregroundColor: theme.colorScheme.primary),
               onPressed: _selectOnMap,
             ),
           ],

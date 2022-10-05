@@ -10,13 +10,14 @@ class PlacesListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final navigator = Navigator.of(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Your Places'),
         actions: [
           IconButton(
               onPressed: () {
-                Navigator.of(context).pushNamed(AddPlaceScreen.routeName);
+                navigator.pushNamed(AddPlaceScreen.routeName);
               },
               icon: const Icon(Icons.add))
         ],
@@ -37,7 +38,7 @@ class PlacesListScreen extends StatelessWidget {
                           title: Text(places.items[i].title),
                           subtitle: Text(places.items[i].location.address!),
                           onTap: () {
-                            Navigator.of(context).pushNamed(
+                            navigator.pushNamed(
                               PlaceDetailScreen.routeName,
                               arguments: places.items[i].id,
                             );
