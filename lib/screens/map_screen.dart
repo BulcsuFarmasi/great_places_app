@@ -4,7 +4,7 @@ import '../models/place.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen(
-      {this.initialLocation = const PlaceLocation(longitude: 5.5638583, latitude: 47.6683983),
+      {super.key, this.initialLocation = const PlaceLocation(longitude: 5.5638583, latitude: 47.6683983),
       this.isSelecting = false});
 
   final PlaceLocation initialLocation;

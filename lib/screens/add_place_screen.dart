@@ -88,8 +88,8 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
                   shape: const RoundedRectangleBorder(),
                   elevation: 0,
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  onPrimary: Colors.black,
-                  primary: Theme
+                  foregroundColor: Colors.black,
+                  backgroundColor: Theme
                       .of(context)
                       .colorScheme
                       .secondary),

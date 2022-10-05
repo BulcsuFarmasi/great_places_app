@@ -8,14 +8,15 @@ import '../screens/map_screen.dart';
 class LocationInput extends StatefulWidget {
   final Function onSelectLocation;
 
-  const LocationInput({required this.onSelectLocation, Key? key}) : super(key: key);
+  const LocationInput({required this.onSelectLocation, Key? key})
+      : super(key: key);
 
   @override
-  _LocationInputState createState() => _LocationInputState();
+  State<LocationInput> createState() => _LocationInputState();
 }
 
 class _LocationInputState extends State<LocationInput> {
-  String _previewImageUrl;
+  String? _previewImageUrl;
 
   void _showPreview(double lat, double lng) {
     final staticMapImageUrl = LocationHelper.generateLocationPreviewImage(
@@ -41,16 +42,17 @@ class _LocationInputState extends State<LocationInput> {
     final selectedLocation = await Navigator.of(context).push<LatLng>(
       MaterialPageRoute(
         fullscreenDialog: true,
-        builder: (ctx) => MapScreen(
-              isSelecting: true,
-            ),
+        builder: (ctx) => const MapScreen(
+          isSelecting: true,
+        ),
       ),
     );
     if (selectedLocation == null) {
       return;
     }
     _showPreview(selectedLocation.latitude, selectedLocation.longitude);
-    widget.onSelectLocation(selectedLocation.latitude, selectedLocation.longitude);
+    widget.onSelectLocation(
+        selectedLocation.latitude, selectedLocation.longitude);
   }
 
   @override
@@ -65,12 +67,12 @@ class _LocationInputState extends State<LocationInput> {
             border: Border.all(width: 1, color: Colors.grey),
           ),
           child: _previewImageUrl == null
-              ? Text(
+              ? const Text(
                   'No Location Chosen',
                   textAlign: TextAlign.center,
                 )
               : Image.network(
-                  _previewImageUrl,
+                  _previewImageUrl!,
                   fit: BoxFit.cover,
                   width: double.infinity,
                 ),
@@ -78,20 +80,22 @@ class _LocationInputState extends State<LocationInput> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            FlatButton.icon(
-              icon: Icon(
+            TextButton.icon(
+              icon: const Icon(
                 Icons.location_on,
               ),
-              label: Text('Current Location'),
-              textColor: Theme.of(context).primaryColor,
+              label: const Text('Current Location'),
+              style: TextButton.styleFrom(
+                  foregroundColor: Theme.of(context).colorScheme.primary),
               onPressed: _getCurrentUserLocation,
             ),
-            FlatButton.icon(
-              icon: Icon(
+            TextButton.icon(
+              icon: const Icon(
                 Icons.map,
               ),
-              label: Text('Select on Map'),
-              textColor: Theme.of(context).primaryColor,
+              label: const Text('Select on Map'),
+              style: TextButton.styleFrom(
+                  foregroundColor: Theme.of(context).colorScheme.primary),
               onPressed: _selectOnMap,
             ),
           ],
