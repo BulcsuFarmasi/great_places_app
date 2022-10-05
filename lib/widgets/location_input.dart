@@ -30,8 +30,8 @@ class _LocationInputState extends State<LocationInput> {
   Future<void> _getCurrentUserLocation() async {
     try {
       final locData = await Location().getLocation();
-      _showPreview(locData.latitude, locData.longitude);
-      widget.onSelectPlace(locData.latitude, locData.longitude);
+      _showPreview(locData.latitude!, locData.longitude!);
+      widget.onSelectLocation(locData.latitude, locData.longitude);
     } catch (error) {
       return;
     }
@@ -50,7 +50,7 @@ class _LocationInputState extends State<LocationInput> {
       return;
     }
     _showPreview(selectedLocation.latitude, selectedLocation.longitude);
-    widget.onSelectPlace(selectedLocation.latitude, selectedLocation.longitude);
+    widget.onSelectLocation(selectedLocation.latitude, selectedLocation.longitude);
   }
 
   @override
