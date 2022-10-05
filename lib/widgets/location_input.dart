@@ -31,15 +31,27 @@ class _LocationInputState extends State<LocationInput> {
   Future<void> _getCurrentUserLocation() async {
     try {
       final locData = await Location().getLocation();
-      _showPreview(locData.latitude!, locData.longitude!);
-      widget.onSelectLocation(locData.latitude, locData.longitude);
+      _displayLocation(locData.longitude!, locData.longitude!);
     } catch (error) {
       return;
     }
   }
 
   Future<void> _selectOnMap() async {
-    final selectedLocation = await Navigator.of(context).push<LatLng>(
+    final selectedLocation = await _fetchLocationFromMap();
+    if (selectedLocation == null) {
+      return;
+    }
+    _displayLocation(selectedLocation.latitude, selectedLocation.longitude);
+  }
+
+  void _displayLocation(double lat, double lng) {
+    _showPreview(lat, lng);
+    widget.onSelectLocation(lat, lng);
+  }
+
+  Future<LatLng?> _fetchLocationFromMap() {
+    return Navigator.of(context).push<LatLng>(
       MaterialPageRoute(
         fullscreenDialog: true,
         builder: (ctx) => const MapScreen(
@@ -47,12 +59,6 @@ class _LocationInputState extends State<LocationInput> {
         ),
       ),
     );
-    if (selectedLocation == null) {
-      return;
-    }
-    _showPreview(selectedLocation.latitude, selectedLocation.longitude);
-    widget.onSelectLocation(
-        selectedLocation.latitude, selectedLocation.longitude);
   }
 
   @override
